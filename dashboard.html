@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Om.Zone | لوحة التحكم</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- القائمة الجانبية -->
+    <div class="sidebar">
+        <div style="text-align: center; color: var(--gold); padding: 20px;">
+            <h2>Om.Zone</h2>
+        </div>
+        <div class="sidebar-item">📊 لوحة التحكم</div>
+        <div class="sidebar-item">⭐ الكورسات المشتركة</div>
+        <div class="sidebar-item">📚 الكورسات المتاحة</div>
+        <div class="sidebar-item">📖 الكتب التقنية</div>
+        <div class="sidebar-item">💬 غرفة التواصل</div>
+        <div class="sidebar-item btn-logout" onclick="confirmLogout()">🔴 تسجيل الخروج</div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div style="margin-right: 270px; padding: 40px;">
+        <h2 id="welcomeMsg">أهلاً بك في منطقتك الخاصة</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="background: #222; padding: 20px; border-radius: 10px; border-top: 4px solid var(--gold);">
+                <h3>ساعات التعلم</h3>
+                <p style="font-size: 24px; color: var(--gold);">6 ساعات</p>
+            </div>
+            <div style="background: #222; padding: 20px; border-radius: 10px; border-top: 4px solid var(--gold);">
+                <h3>المستوى الحالي</h3>
+                <p id="rank" style="font-size: 24px; color: var(--gold);">مبتدئ</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmLogout() {
+            if (confirm("هل أنت متأكد من أنك تريد تسجيل الخروج؟ سيتم حذف بيانات الجلسة.")) {
+                // منطق الحذف هنا
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
