@@ -1,0 +1,72 @@
+:root {
+    --gold: #d4af37;
+    --dark-gold: #aa8a2e;
+    --black: #0f0f0f;
+    --soft-black: #1a1a1a;
+    --white: #ffffff;
+}
+
+body {
+    background-color: var(--black);
+    color: var(--white);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    direction: rtl;
+}
+
+/* التنسيق الذهبي للحقول */
+input {
+    background: var(--soft-black);
+    border: 1px solid var(--gold);
+    color: white;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.btn-gold {
+    background: linear-gradient(45deg, var(--gold), var(--dark-gold));
+    color: black;
+    font-weight: bold;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-gold:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--gold);
+}
+
+/* القائمة الجانبية */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: var(--soft-black);
+    border-left: 2px solid var(--gold);
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding-top: 20px;
+}
+
+.sidebar-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar-item:hover {
+    background: var(--gold);
+    color: black;
+}
+
+.btn-logout {
+    background-color: #ff4d4d;
+    color: white;
+    margin-top: 20px;
+}
