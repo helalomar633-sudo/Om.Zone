@@ -8,30 +8,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; }
-        body { background: #000; color: #fff; font-family: 'Cairo', sans-serif; margin: 0; }
-        .sidebar { width: 260px; position: fixed; right: 0; top: 0; height: 100%; background: #0a0a0a; border-left: 1px solid #222; z-index: 100; }
-        .sidebar-item { padding: 15px 25px; cursor: pointer; transition: 0.3s; color: #888; border-bottom: 1px solid #111; }
-        .sidebar-item:hover, .active-item { background: #111; color: var(--gold); border-right: 4px solid var(--gold); }
-        .content-section { display: none; margin-right: 260px; padding: 40px; }
-        .active-section { display: block; }
-        .card { background: #111; padding: 25px; border-radius: 15px; border: 1px solid #222; }
-        .course-card { background: #111; border: 1px solid #333; padding: 20px; border-radius: 15px; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .course-card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        .btn-gold { background: var(--gold); color: black; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        body { background: #000; color: #fff; font-family: 'Cairo', sans-serif; margin: 0; overflow-x: hidden; }
         
-        /* شات ستايل */
-        #chatBox { height: 350px; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: #050505; }
-        .msg-client { background: #333; color: white; padding: 12px; border-radius: 15px 15px 0 15px; align-self: flex-end; max-width: 80%; border: 1px solid #444; }
-        .msg-admin { background: var(--gold); color: black; padding: 12px; border-radius: 15px 15px 15px 0; align-self: flex-start; max-width: 80%; font-weight: bold; }
-        #userMsg { flex: 1; padding: 12px; background: #000; border: 1px solid #444; color: white; border-radius: 25px; outline: none; }
-        .btn-logout { position: absolute; bottom: 20px; width: 100%; text-align: center; color: #ff4444; cursor: pointer; font-weight: bold; }
+        /* Sidebar Styling */
+        .sidebar { width: 260px; position: fixed; right: 0; top: 0; height: 100%; background: #0a0a0a; border-left: 1px solid #222; z-index: 100; display: flex; flex-direction: column; }
+        .sidebar-item { padding: 18px 25px; cursor: pointer; transition: 0.3s; color: #888; border-bottom: 1px solid #111; }
+        .sidebar-item:hover, .active-item { background: #111; color: var(--gold); border-right: 4px solid var(--gold); }
+        
+        /* Layout */
+        .content-section { display: none; margin-right: 260px; padding: 40px; min-height: 100vh; }
+        .active-section { display: block; }
+        
+        /* Cards */
+        .card { background: #111; padding: 25px; border-radius: 15px; border: 1px solid #222; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .course-card { background: #111; border: 1px solid #333; padding: 20px; border-radius: 15px; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .course-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+        
+        .btn-gold { background: var(--gold); color: black; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 10px var(--gold); }
+
+        /* Chat Styling */
+        #chatBox { height: 380px; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: #050505; border-bottom: 1px solid #222; }
+        .msg-client { background: #222; color: white; padding: 12px 18px; border-radius: 18px 18px 0 18px; align-self: flex-end; max-width: 75%; border: 1px solid #444; position: relative; }
+        .msg-admin { background: var(--gold); color: black; padding: 12px 18px; border-radius: 18px 18px 18px 0; align-self: flex-start; max-width: 75%; font-weight: bold; }
+        
+        .chat-input-area { padding: 15px; background: #0f0f0f; display: flex; gap: 10px; }
+        #userMsg { flex: 1; padding: 12px 20px; background: #000; border: 1px solid #333; color: white; border-radius: 30px; outline: none; }
+        #userMsg:focus { border-color: var(--gold); }
+
+        .btn-logout { margin-top: auto; padding: 20px; text-align: center; color: #ff4444; cursor: pointer; font-weight: bold; transition: 0.3s; border-top: 1px solid #222; }
+        .btn-logout:hover { background: #400; color: #fff; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div style="padding: 30px; text-align: center;">
-            <h1 style="color: var(--gold); margin: 0; font-size: 28px; letter-spacing: 2px;">Om.Zone</h1>
+        <div style="padding: 40px 20px; text-align: center;">
+            <h1 style="color: var(--gold); margin: 0; font-size: 32px; letter-spacing: 3px; font-weight: bold;">Om.Zone</h1>
         </div>
         <div class="sidebar-item active-item" onclick="showSection('dash')">📊 لوحة التحكم</div>
         <div class="sidebar-item" onclick="showSection('my-courses')">⭐ الكورسات المشتركة</div>
@@ -43,53 +56,56 @@
 
     <!-- 1. لوحة التحكم -->
     <div id="dash" class="content-section active-section">
-        <h2 id="welcomeMsg">أهلاً بك..</h2>
+        <h2 id="welcomeMsg" style="color: var(--gold);">أهلاً بك..</h2>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
-            <div class="card" style="text-align: center; border: 1px solid var(--gold);">
+            <div class="card" style="text-align: center; border-top: 4px solid var(--gold);">
                 <h3 style="color: #888;">إجمالي ساعات التعلم</h3>
-                <p id="timerDisplay" style="color:var(--gold); font-size: 45px; margin: 10px 0;">00:00:00</p>
-                <p id="statusUpdate" style="font-size: 12px; color: #555;">العداد متوقف</p>
+                <p id="timerDisplay" style="color:var(--gold); font-size: 55px; margin: 15px 0; font-weight: bold;">00:00:00</p>
+                <p id="statusUpdate" style="font-size: 14px; color: #666;">العداد متوقف</p>
             </div>
-            <div class="card" style="text-align: center;">
+            <div class="card" style="text-align: center; border-top: 4px solid #444;">
                 <h3 style="color: #888;">المستوى الحالي</h3>
-                <p id="rankDisplay" style="color:var(--gold); font-size: 35px; margin: 10px 0;">مبتدئ</p>
-                <small id="courseCountDisplay">عدد الكورسات المشتركة: 1</small>
+                <p id="rankDisplay" style="color:var(--gold); font-size: 40px; margin: 15px 0; font-weight: bold;">مبتدئ</p>
+                <small id="courseCountDisplay" style="color: #aaa;">عدد الكورسات المشتركة: 1</small>
             </div>
         </div>
     </div>
 
     <!-- 2. الكورسات المشتركة -->
     <div id="my-courses" class="content-section">
-        <h2 style="color:var(--gold)">كورساتي المشتركة</h2>
+        <h2 style="color:var(--gold)">⭐ كورساتي المشتركة</h2>
         <div class="course-card">
-            <div><h3>دورة أساسيات Python</h3><p style="color: #777;">ابدأ المذاكرة الآن</p></div>
+            <div>
+                <h3>دورة أساسيات Python</h3>
+                <p style="color: #777;">ابدأ المذاكرة الآن لتفعيل العداد</p>
+            </div>
             <button class="btn-gold" onclick="startLearning('Python Basics')">بدأ المذاكرة 📖</button>
         </div>
     </div>
 
     <!-- 3. جميع الكورسات -->
     <div id="all-courses" class="content-section">
-        <h2 style="color:var(--gold)">متجر الكورسات</h2>
+        <h2 style="color:var(--gold)">📚 متجر الكورسات</h2>
         <div class="course-card">
-            <div><h3>Full-Stack Web Development</h3><p>من الصفر للاحتراف</p></div>
+            <div><h3>Full-Stack Web Development</h3><p style="color: #777;">من الصفر للاحتراف (HTML, CSS, JS, Python)</p></div>
             <button class="btn-gold" onclick="showSection('chat')">طلب اشتراك</button>
         </div>
     </div>
 
     <!-- 4. المكتبة -->
     <div id="books" class="content-section">
-        <h2 style="color:var(--gold)">المكتبة الرقمية</h2>
-        <div class="card"><p>📚 سيتم رفع الكتب قريباً.</p></div>
+        <h2 style="color:var(--gold)">📖 المكتبة الرقمية</h2>
+        <div class="card"><p style="text-align: center; color: #888;">📚 سيتم رفع الكتب والمراجع قريباً.</p></div>
     </div>
 
-    <!-- 5. غرفة التواصل المحدثة -->
+    <!-- 5. غرفة التواصل -->
     <div id="chat" class="content-section">
-        <h2 style="color:var(--gold)">الدعم الفني والتواصل</h2>
-        <div class="card" style="max-width: 700px; margin: auto; padding: 0; overflow: hidden; border: 1px solid var(--gold);">
+        <h2 style="color:var(--gold)">💬 الدعم الفني والتواصل</h2>
+        <div class="card" style="max-width: 800px; margin: auto; padding: 0; overflow: hidden; border: 1px solid #333;">
             <div id="chatBox"></div>
-            <div style="padding: 15px; background: #111; display: flex; gap: 10px; border-top: 1px solid #333;">
-                <input type="text" id="userMsg" placeholder="اكتب رسالتك هنا...">
-                <button class="btn-gold" onclick="sendMessage()" style="border-radius: 50%; width: 50px; height: 50px;">✈</button>
+            <div class="chat-input-area">
+                <input type="text" id="userMsg" placeholder="اكتب رسالتك لصاحب المنصة...">
+                <button class="btn-gold" onclick="sendMessage()" style="border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; padding: 0;">✈</button>
             </div>
         </div>
     </div>
@@ -99,17 +115,15 @@
         function showSection(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
+            
             document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active-item'));
-            // تحديد العنصر اللي ضغطنا عليه في السايدبار
             const items = document.querySelectorAll('.sidebar-item');
-            if(id === 'dash') items[0].classList.add('active-item');
-            else if(id === 'my-courses') items[1].classList.add('active-item');
-            else if(id === 'all-courses') items[2].classList.add('active-item');
-            else if(id === 'books') items[3].classList.add('active-item');
-            else if(id === 'chat') items[4].classList.add('active-item');
+            const sections = ['dash', 'my-courses', 'all-courses', 'books', 'chat'];
+            const index = sections.indexOf(id);
+            if(index !== -1) items[index].classList.add('active-item');
         }
 
-        // --- نظام العداد (المحفوظ) ---
+        // --- نظام العداد ---
         let totalSeconds = parseInt(localStorage.getItem('studySeconds') || 0);
         let timerInterval = null;
 
@@ -130,15 +144,16 @@
                 }, 1000);
                 document.getElementById('statusUpdate').innerText = "🟢 يتم الآن المذاكرة: " + course;
                 document.getElementById('statusUpdate').style.color = "var(--gold)";
+                alert("تم بدء عداد ساعات التعلم لـ " + course);
             }
         }
 
-        // --- نظام الشات (المحفوظ) ---
+        // --- نظام الشات المطور ---
         let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
 
         function renderChat() {
             const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = '<div class="msg-admin">مرحباً بك في Om.Zone! أرسل استفسارك وسنقوم بالرد عليك.</div>';
+            chatBox.innerHTML = '<div class="msg-admin">مرحباً بك في Om.Zone! أرسل استفسارك بخصوص الكورسات وسيرد عليك هلال عمر بنفسه.</div>';
             chatHistory.forEach(msg => {
                 const div = document.createElement('div');
                 div.className = msg.role === 'user' ? 'msg-client' : 'msg-admin';
@@ -153,28 +168,32 @@
             const text = input.value.trim();
             if(!text) return;
 
+            // حفظ الرسالة محلياً
             chatHistory.push({ role: 'user', text: text });
             localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
             renderChat();
             input.value = "";
 
-            // إرسال للواتساب
-            const whatsappNumber = "201021422784";
-            const name = localStorage.getItem('userName') || "طالب";
+            // توجيه للواتساب (رقمك الجديد)
+            const whatsappNumber = "201221546924";
+            const userName = localStorage.getItem('userName') || "طالب جديد";
+            
             setTimeout(() => {
-                window.open(`https://wa.me/${whatsappNumber}?text=استفسار من: ${name}%0Aالرسالة: ${text}`, '_blank');
-            }, 1000);
+                const encodedMsg = encodeURIComponent(`استفسار من طالب Om.Zone (${userName}):\n${text}`);
+                window.open(`https://wa.me/${whatsappNumber}?text=${encodedMsg}`, '_blank');
+            }, 800);
         }
 
         function logout() {
-            if(confirm("هل تريد تسجيل الخروج؟")) {
+            if(confirm("هل أنت متأكد؟ سيتم حذف حسابك وبيانات المذاكرة نهائياً من هذا المتصفح.")) {
                 localStorage.clear();
                 window.location.href = 'index.html';
             }
         }
 
-        // تشغيل الوظائف عند التحميل
-        document.getElementById('welcomeMsg').innerText = "أهلاً بك يا " + (localStorage.getItem('userName') || "عضو");
+        // التشغيل الابتدائي
+        const savedName = localStorage.getItem('userName');
+        document.getElementById('welcomeMsg').innerText = "أهلاً بك يا " + (savedName || "عضو Om.Zone");
         displayTime();
         renderChat();
     </script>
