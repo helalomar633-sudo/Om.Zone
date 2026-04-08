@@ -9,39 +9,122 @@
 
     <!-- القائمة الجانبية -->
     <div class="sidebar">
-        <div style="text-align: center; color: var(--gold); padding: 20px;">
-            <h2>Om.Zone</h2>
+        <div style="padding: 30px; text-align: center;">
+            <h1 style="color: var(--gold); margin: 0; font-size: 28px;">Om.Zone</h1>
         </div>
-        <div class="sidebar-item">📊 لوحة التحكم</div>
-        <div class="sidebar-item">⭐ الكورسات المشتركة</div>
-        <div class="sidebar-item">📚 الكورسات المتاحة</div>
-        <div class="sidebar-item">📖 الكتب التقنية</div>
-        <div class="sidebar-item">💬 غرفة التواصل</div>
-        <div class="sidebar-item btn-logout" onclick="confirmLogout()">🔴 تسجيل الخروج</div>
+        
+        <div class="sidebar-item active-item" onclick="showSection('dash')">📊 لوحة التحكم</div>
+        <div class="sidebar-item" onclick="showSection('my-courses')">⭐ الكورسات المشتركة</div>
+        <div class="sidebar-item" onclick="showSection('all-courses')">📚 جميع الكورسات</div>
+        <div class="sidebar-item" onclick="showSection('books')">📖 المكتبة والكتب</div>
+        <div class="sidebar-item" onclick="showSection('chat')">💬 غرفة التواصل</div>
+        <div class="btn-logout" onclick="deleteAccount()">🔴 تسجيل الخروج والحذف</div>
     </div>
 
-    <!-- المحتوى الرئيسي -->
-    <div style="margin-right: 270px; padding: 40px;">
-        <h2 id="welcomeMsg">أهلاً بك في منطقتك الخاصة</h2>
+    <!-- 1. قسم لوحة التحكم -->
+    <div id="dash" class="content-section active-section">
+        <h2 id="welcomeMsg">أهلاً بك..</h2>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div style="background: #222; padding: 20px; border-radius: 10px; border-top: 4px solid var(--gold);">
+            <div class="card">
                 <h3>ساعات التعلم</h3>
-                <p style="font-size: 24px; color: var(--gold);">6 ساعات</p>
+                <p id="timerDisplay" class="gold-text" style="font-size: 35px;">00:00:00</p>
+                <small>يتم الحساب تلقائياً أثناء تواجدك</small>
             </div>
-            <div style="background: #222; padding: 20px; border-radius: 10px; border-top: 4px solid var(--gold);">
+            <div class="card">
                 <h3>المستوى الحالي</h3>
-                <p id="rank" style="font-size: 24px; color: var(--gold);">مبتدئ</p>
+                <p id="rankDisplay" class="gold-text" style="font-size: 35px;">مبتدئ</p>
+                <small id="courseCountDisplay">عدد الكورسات: 0</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. الكورسات المشتركة -->
+    <div id="my-courses" class="content-section">
+        <h2>كورساتي المشتركة</h2>
+        <div id="enrolledList" class="card">لا يوجد كورسات مشتركة حالياً.</div>
+    </div>
+
+    <!-- 3. متجر الكورسات -->
+    <div id="all-courses" class="content-section">
+        <h2>كل الكورسات</h2>
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h3>دورة Python الشاملة</h3>
+                <p>تعلم البرمجة من الصفر حتى الاحتراف</p>
+            </div>
+            <button class="btn-gold" onclick="showSection('chat')">طلب اشتراك</button>
+        </div>
+    </div>
+
+    <!-- 4. الكتب -->
+    <div id="books" class="content-section">
+        <h2>المكتبة</h2>
+        <div class="card">📚 كتاب "أساسيات البرمجة" - قريباً</div>
+    </div>
+
+    <!-- 5. غرفة التواصل -->
+    <div id="chat" class="content-section">
+        <h2>تواصل مع الإدارة</h2>
+        <div class="card" style="height: 300px; display: flex; flex-direction: column;">
+            <div style="flex-grow: 1; border-bottom: 1px solid #333; padding: 10px;">
+                <p style="background: #333; padding: 10px; border-radius: 10px; width: fit-content;">مرحباً بك! اطلب تفعيل أي كورس هنا.</p>
+            </div>
+            <div style="padding-top: 15px; display: flex;">
+                <input type="text" placeholder="اكتب رسالتك..." style="margin: 0;">
+                <button class="btn-gold" style="margin-right: 10px;">إرسال</button>
             </div>
         </div>
     </div>
 
     <script>
-        function confirmLogout() {
-            if (confirm("هل أنت متأكد من أنك تريد تسجيل الخروج؟ سيتم حذف بيانات الجلسة.")) {
-                // منطق الحذف هنا
+        // --- نظام التبديل بين الخانات ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active-section');
+            });
+            document.getElementById(sectionId).classList.add('active-section');
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active-item');
+            });
+            event.currentTarget.classList.add('active-item');
+        }
+
+        // --- نظام حساب ساعات التعلم (Live Timer) ---
+        let totalSeconds = parseInt(localStorage.getItem('studySeconds') || 0);
+        function updateTimer() {
+            totalSeconds++;
+            localStorage.setItem('studySeconds', totalSeconds);
+            let hrs = Math.floor(totalSeconds / 3600);
+            let mins = Math.floor((totalSeconds % 3600) / 60);
+            let secs = totalSeconds % 60;
+            document.getElementById('timerDisplay').innerText = 
+                `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        setInterval(updateTimer, 1000);
+
+        // --- نظام المستويات ---
+        let courses = 0; // يمكنك تغيير هذا الرقم لاختبار الرتبة
+        function updateRank() {
+            let rank = "مبتدئ";
+            if (courses >= 3 && courses < 7) rank = "متوسط";
+            else if (courses >= 7 && courses < 12) rank = "محترف";
+            else if (courses >= 12) rank = "عالمي";
+            document.getElementById('rankDisplay').innerText = rank;
+            document.getElementById('courseCountDisplay').innerText = "عدد الكورسات: " + courses;
+        }
+        updateRank();
+
+        // --- تسجيل الخروج والحذف ---
+        function deleteAccount() {
+            if (confirm("هل أنت متأكد؟ الضغط على نعم سيؤدي لحذف حسابك نهائياً من هذا الجهاز.")) {
+                localStorage.clear();
                 window.location.href = 'index.html';
             }
         }
+
+        // إظهار الاسم
+        document.getElementById('welcomeMsg').innerText = "أهلاً بك يا " + (localStorage.getItem('userName') || "طالبنا");
     </script>
 </body>
 </html>
